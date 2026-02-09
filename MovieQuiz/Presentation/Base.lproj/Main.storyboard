@@ -8,6 +8,14 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="YS Display-Bold.ttf">
+            <string>YSDisplay-Bold</string>
+        </array>
+        <array key="YS Display-Medium.ttf">
+            <string>YSDisplay-Medium</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Movie Quiz View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -17,61 +25,82 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PdS-vl-7Ls">
-                                <rect key="frame" x="20" y="362" width="353" height="128"/>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="dddddd" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TRW-RQ-t0S">
-                                <rect key="frame" x="20" y="684" width="353" height="20"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                <color key="textColor" name="YP White (iOS)"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iJv-Ag-oIE">
-                                <rect key="frame" x="20" y="724" width="157" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="157" id="9NE-Eh-Cvb"/>
-                                    <constraint firstAttribute="height" constant="60" id="pEl-Ge-Loa"/>
-                                </constraints>
-                                <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
-                                <color key="tintColor" name="YP Red (iOS)"/>
-                                <inset key="contentEdgeInsets" minX="197" minY="718" maxX="0.0" maxY="0.0"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Нет" cornerStyle="fixed" titleAlignment="center">
-                                    <backgroundConfiguration key="background" cornerRadius="15">
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="A3D-gu-snk">
+                                <rect key="frame" x="20" y="128" width="353" height="656"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f7o-tu-xFe">
+                                        <rect key="frame" x="0.0" y="0.0" width="353" height="6.666666666666667"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Вопрос:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TRW-RQ-t0S" userLabel="Question Title Label">
+                                                <rect key="frame" x="0.0" y="0.0" width="317" height="6.666666666666667"/>
+                                                <fontDescription key="fontDescription" name="YSDisplay-Medium" family="YS Display" pointSize="20"/>
+                                                <color key="textColor" name="YP White (iOS)"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="1/10" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wT3-jR-Ibd" userLabel="Index Label">
+                                                <rect key="frame" x="317" y="0.0" width="36" height="6.666666666666667"/>
+                                                <fontDescription key="fontDescription" name="YSDisplay-Medium" family="YS Display" pointSize="20"/>
+                                                <color key="textColor" name="YP White (iOS)"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PdS-vl-7Ls" userLabel="Preview Image">
+                                        <rect key="frame" x="0.0" y="26.666666666666686" width="353" height="529.33333333333326"/>
                                         <color key="backgroundColor" name="YP White (iOS)"/>
-                                    </backgroundConfiguration>
-                                    <fontDescription key="titleFontDescription" name="YSDisplay-Medium" family="YS Display" pointSize="20"/>
-                                    <color key="baseForegroundColor" name="YP Black (iOS)"/>
-                                </buttonConfiguration>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RNv-VU-Qc7">
-                                <rect key="frame" x="215" y="724" width="158" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="158" id="L4v-aG-cEV"/>
-                                    <constraint firstAttribute="height" constant="60" id="U6M-Bq-SmB"/>
-                                </constraints>
-                                <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
-                                <inset key="contentEdgeInsets" minX="197" minY="718" maxX="0.0" maxY="0.0"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Да" cornerStyle="fixed" titleAlignment="center">
-                                    <backgroundConfiguration key="background" cornerRadius="15">
-                                        <color key="backgroundColor" name="YP White (iOS)"/>
-                                    </backgroundConfiguration>
-                                    <fontDescription key="titleFontDescription" name="YSDisplay-Medium" family="YS Display" pointSize="20"/>
-                                    <color key="baseForegroundColor" name="YP Black (iOS)"/>
-                                </buttonConfiguration>
-                            </button>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="PdS-vl-7Ls" secondAttribute="height" multiplier="2:3" id="a1x-eQ-vBD"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Рейтинг этого фильма меньше, чем 5?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bcb-96-bhy" userLabel="Question Label">
+                                        <rect key="frame" x="0.0" y="576" width="353" height="0.0"/>
+                                        <fontDescription key="fontDescription" name="YSDisplay-Bold" family="YS Display" pointSize="23"/>
+                                        <color key="textColor" name="YP White (iOS)"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="MZC-Rd-g8X">
+                                        <rect key="frame" x="0.0" y="596" width="353" height="60"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iJv-Ag-oIE" userLabel="No Button">
+                                                <rect key="frame" x="0.0" y="0.0" width="166.66666666666666" height="60"/>
+                                                <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                                                <color key="tintColor" name="YP Red (iOS)"/>
+                                                <inset key="contentEdgeInsets" minX="197" minY="718" maxX="0.0" maxY="0.0"/>
+                                                <buttonConfiguration key="configuration" style="filled" title="Нет" cornerStyle="fixed" titleAlignment="center">
+                                                    <backgroundConfiguration key="background" cornerRadius="15">
+                                                        <color key="backgroundColor" name="YP White (iOS)"/>
+                                                    </backgroundConfiguration>
+                                                    <fontDescription key="titleFontDescription" name="YSDisplay-Medium" family="YS Display" pointSize="20"/>
+                                                    <color key="baseForegroundColor" name="YP Black (iOS)"/>
+                                                </buttonConfiguration>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RNv-VU-Qc7" userLabel="Yes Button">
+                                                <rect key="frame" x="186.66666666666663" y="0.0" width="166.33333333333337" height="60"/>
+                                                <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                                                <inset key="contentEdgeInsets" minX="197" minY="718" maxX="0.0" maxY="0.0"/>
+                                                <buttonConfiguration key="configuration" style="filled" title="Да" cornerStyle="fixed" titleAlignment="center">
+                                                    <backgroundConfiguration key="background" cornerRadius="15">
+                                                        <color key="backgroundColor" name="YP White (iOS)"/>
+                                                    </backgroundConfiguration>
+                                                    <fontDescription key="titleFontDescription" name="YSDisplay-Medium" family="YS Display" pointSize="20"/>
+                                                    <color key="baseForegroundColor" name="YP Black (iOS)"/>
+                                                </buttonConfiguration>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="mFH-PC-l3n"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black (iOS)"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="iJv-Ag-oIE" secondAttribute="bottom" id="KAx-SO-yPm"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PdS-vl-7Ls" secondAttribute="trailing" constant="20" id="KVU-f6-hVJ"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RNv-VU-Qc7" secondAttribute="trailing" constant="20" id="Qdp-6p-Ddm"/>
-                            <constraint firstItem="iJv-Ag-oIE" firstAttribute="top" secondItem="TRW-RQ-t0S" secondAttribute="bottom" constant="20" id="awq-GT-cE8"/>
-                            <constraint firstItem="iJv-Ag-oIE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="dBF-nI-jFZ"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="TRW-RQ-t0S" secondAttribute="trailing" constant="20" id="nCK-fi-oPt"/>
-                            <constraint firstItem="TRW-RQ-t0S" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="qdl-Bb-SH8"/>
-                            <constraint firstItem="PdS-vl-7Ls" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="xVz-3Z-uEO"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="RNv-VU-Qc7" secondAttribute="bottom" id="z8y-8d-FfM"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="A3D-gu-snk" secondAttribute="trailing" constant="20" id="3nN-gn-aUB"/>
+                            <constraint firstItem="A3D-gu-snk" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Sgg-4W-bd5"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="A3D-gu-snk" secondAttribute="bottom" id="Ylc-tG-dbC"/>
+                            <constraint firstItem="A3D-gu-snk" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="9.9999999999999716" id="jV2-0I-pv2"/>
                         </constraints>
                     </view>
                 </viewController>
