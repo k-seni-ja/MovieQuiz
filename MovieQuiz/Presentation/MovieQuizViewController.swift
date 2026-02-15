@@ -3,7 +3,6 @@ import UIKit
 final class MovieQuizViewController: UIViewController {
     
     //MARK: - Models & Mock Data
-    
     private struct QuizQuestion {
         let imageName: String
         let textQuestion: String
@@ -52,7 +51,6 @@ final class MovieQuizViewController: UIViewController {
             textQuestion: "Рейтинг этого фильма больше чем 6?",
             correctAnswer: false)]
     
-    
     //MARK: - View Models
     // состояние "Вопрос показан"
     private struct QuizStepViewModel {
@@ -60,10 +58,11 @@ final class MovieQuizViewController: UIViewController {
         let question: String  // из questions: [QuizQuestion]
         let questionNumber: String
     }
+    
     // состояние "Результат квиза"
     private struct QuizResultsViewModel {
         let titleAlert: String
-        let textAlert: String // количество набранных очков
+        let textAlert: String // итоговое количество набранных очков
         let buttonTextAlert: String
     }
     
@@ -71,6 +70,8 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private weak var counterLabel: UILabel!
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var textLabel: UILabel!
+    @IBOutlet weak var noButton: UIButton!
+    @IBOutlet weak var yesButton: UIButton!
     
     //MARK: - Properties
     // индекс текущего вопроса, начальное значение 0
@@ -86,7 +87,6 @@ final class MovieQuizViewController: UIViewController {
         let viewModel = convert(model: currentQuestion)
         showQuestion(quiz: viewModel)
     }
-    
     
     //MARK: - Methods
     // конвертируем модель данных questions[currentQuestionIndex] во view Model (готовим данные для отображения)
@@ -104,6 +104,11 @@ final class MovieQuizViewController: UIViewController {
         imageView.layer.cornerRadius = 20
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
+        
+        // разблокировка кнопок
+        noButton.isEnabled = true
+        yesButton.isEnabled = true
+        
         // уберем рамку перед следующим вопросом
         imageView.layer.borderWidth = 0
         imageView.layer.borderColor = nil
@@ -111,6 +116,10 @@ final class MovieQuizViewController: UIViewController {
     
     //  рамка, отображающая результат каждого раунда
     private func showAnswerResult(isCorrect: Bool) {
+        // блокировка кнопок
+        noButton.isEnabled = false
+        yesButton.isEnabled = false
+        
         if isCorrect {
             correctAnswers += 1
         }
@@ -123,25 +132,6 @@ final class MovieQuizViewController: UIViewController {
             // код, который мы хотим вызвать через 1 секунду
             self.showNextQuestionOrResults()
         }
-    }
-    
-    // показ состояния экрана "конец игры"
-    private func showResults(quiz result: QuizResultsViewModel) {
-        let alert = UIAlertController(
-            title: result.titleAlert,
-            message: result.textAlert,
-            preferredStyle: .alert)
-        
-        let action = UIAlertAction(title: result.buttonTextAlert, style: .default) { _ in
-            self.currentQuestionIndex = 0
-            self.correctAnswers = 0
-            
-            let firstQuestion = self.questions[self.currentQuestionIndex]
-            let viewModel = self.convert(model: firstQuestion)
-            self.showQuestion(quiz: viewModel)
-        }
-        alert.addAction(action)
-        self.present(alert, animated: true, completion: nil)
     }
     
     // выбор между состояниями экрана "конец игры" / "вопрос"
@@ -158,6 +148,29 @@ final class MovieQuizViewController: UIViewController {
             let viewModel = convert(model: nextQuestion)
             showQuestion(quiz: viewModel)
         }
+    }
+    
+    // показ состояния экрана "конец игры"
+    private func showResults(quiz result: QuizResultsViewModel) {
+        // блокировка кнопок
+        noButton.isEnabled = false
+        yesButton.isEnabled = false
+        
+        let alert = UIAlertController(
+            title: result.titleAlert,
+            message: result.textAlert,
+            preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: result.buttonTextAlert, style: .default) { _ in
+            self.currentQuestionIndex = 0
+            self.correctAnswers = 0
+            
+            let firstQuestion = self.questions[self.currentQuestionIndex]
+            let viewModel = self.convert(model: firstQuestion)
+            self.showQuestion(quiz: viewModel)
+        }
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
     }
     
     //MARK: - IBAction
