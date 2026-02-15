@@ -3,6 +3,7 @@ import UIKit
 final class MovieQuizViewController: UIViewController {
     
     //MARK: - Models & Mock Data
+    
     private struct QuizQuestion {
         let imageName: String
         let textQuestion: String
