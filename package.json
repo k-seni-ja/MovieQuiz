@@ -1,0 +1,32 @@
+{
+  "name": "moviequiz-ios",
+  "version": "1.0.0",
+  "description": "MovieQuiz - это приложение с квизами о фильмах из топ-250 рейтинга и самых популярных фильмах по версии IMDb.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/k-seni-ja/MovieQuiz.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/k-seni-ja/MovieQuiz/issues"
+  },
+  "homepage": "https://github.com/k-seni-ja/MovieQuiz#readme",
+  "devDependencies": {
+    "cz-customizable": "^7.5.1"
+  },
+  "config": {
+      "commitizen": {
+        "path": "node_modules/cz-customizable"
+      },
+      "cz-customizable": {
+        "config": "config/git/commitizen.js"
+      }
+    }
+}
