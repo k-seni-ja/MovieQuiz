@@ -5,4 +5,8 @@
 //  Created by Ксения Штыркова on 25.02.2026.
 //
 
-import Foundation
+import UIKit
+
+protocol QuestionFactoryProtocol {
+    func requestNextQuestion()
+}
