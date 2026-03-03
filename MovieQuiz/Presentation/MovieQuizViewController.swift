@@ -6,8 +6,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private weak var counterLabel: UILabel!
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var textLabel: UILabel!
-    @IBOutlet weak var noButton: UIButton!
-    @IBOutlet weak var yesButton: UIButton!
+    @IBOutlet private weak var noButton: UIButton!
+    @IBOutlet private weak var yesButton: UIButton!
     
     //MARK: - Properties
     // индекс текущего вопроса, начальное значение 0
@@ -20,11 +20,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var questionFactory: QuestionFactoryProtocol = QuestionFactory()
     //вопрос, который видит пользователь
     private var currentQuestion: QuizQuestion?
+    // отображение Алерта
+    private var alertPresenter = AlertPresenter()
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // внедрение зависимости делегату 
+        // внедрение зависимости делегату
         let questionFactory = QuestionFactory()
         questionFactory.setup(delegate: self)
         self.questionFactory = questionFactory
@@ -108,25 +110,23 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     // показ состояния экрана "конец игры"
-    private func showResults(quiz result: QuizResultsViewModel) {
+    func showResults(quiz result: QuizResultsViewModel) {
         // блокировка кнопок
         noButton.isEnabled = false
         yesButton.isEnabled = false
         
-        let alert = UIAlertController(
-            title: result.titleAlert,
-            message: result.textAlert,
-            preferredStyle: .alert)
-        
-        let action = UIAlertAction(title: result.buttonTextAlert, style: .default) {[weak self] _ in
-            guard let self = self else {return}
-            self.currentQuestionIndex = 0
-            self.correctAnswers = 0
-            self.questionFactory.requestNextQuestion()
-        }
-        alert.addAction(action)
-        self.present(alert, animated: true, completion: nil)
+        let message = presenter.makeResultsMessage()
+        let model = AlertModel(
+            titleAlert: result.titleAlert,
+            messageAlert: message,
+            buttonTextAlert: result.buttonTextAlert) { [weak self] in
+                guard let self = self else {return}
+                self.presenter.restartGame()
+            }
+        alertPresenter.showResults(in: self, model: model)
     }
+    
+    
     //MARK: - IBAction
     @IBAction private func noButtonClicked(_ sender: UIButton) {
         guard let currentQuestion = currentQuestion else {

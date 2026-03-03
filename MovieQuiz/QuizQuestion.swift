@@ -7,7 +7,7 @@
 
 import UIKit
 
-//MARK: - Models data
+//MARK: - Model data
 
 // модель вопроса
 struct QuizQuestion {
