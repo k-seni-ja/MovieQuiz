@@ -17,22 +17,22 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     //общее количество вопросов
     private let questionsAmount: Int = 10
     // фабрика вопросов
-    private var questionFactory: QuestionFactoryProtocol = QuestionFactory()
+    private var questionFactory: QuestionFactoryProtocol?
     //вопрос, который видит пользователь
     private var currentQuestion: QuizQuestion?
     // отображение Алерта
-    private var alertPresenter = AlertPresenter()
+    private let alertPresenter = AlertPresenter()
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         // внедрение зависимости делегату
-        let questionFactory = QuestionFactory()
-        questionFactory.setup(delegate: self)
-        self.questionFactory = questionFactory
+        let factory = QuestionFactory()
+        factory.setup(delegate: self)
+        self.questionFactory = factory
         
         // показать 1 вопрос при загрузке (из фабрики вопросов)
-        questionFactory.requestNextQuestion()
+        questionFactory?.requestNextQuestion()
     }
     
     // MARK: - QuestionFactoryDelegate
@@ -105,7 +105,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             showResults(quiz: viewModelAlert)
         } else {
             currentQuestionIndex += 1
-            questionFactory.requestNextQuestion()
+            questionFactory?.requestNextQuestion()
         }
     }
     
@@ -114,14 +114,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         // блокировка кнопок
         noButton.isEnabled = false
         yesButton.isEnabled = false
-        
-        let message = presenter.makeResultsMessage()
+    
         let model = AlertModel(
             titleAlert: result.titleAlert,
-            messageAlert: message,
+            messageAlert: result.textAlert,
             buttonTextAlert: result.buttonTextAlert) { [weak self] in
                 guard let self = self else {return}
-                self.presenter.restartGame()
+                self.correctAnswers = 0
+                self.currentQuestionIndex = 0
+                self.questionFactory?.requestNextQuestion()
             }
         alertPresenter.showResults(in: self, model: model)
     }
