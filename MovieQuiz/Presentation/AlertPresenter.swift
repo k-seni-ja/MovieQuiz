@@ -23,6 +23,7 @@ final class AlertPresenter {
             style: .default) { _ in
             model.completion()
         }
+        
         alert.addAction(action)
         controller.present(alert, animated: true, completion: nil)
     }

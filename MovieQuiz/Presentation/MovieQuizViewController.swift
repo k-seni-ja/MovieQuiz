@@ -22,6 +22,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var currentQuestion: QuizQuestion?
     // отображение Алерта
     private let alertPresenter = AlertPresenter()
+    // статистика предыдущих игр
+    private var statisticService: StatisticServiceProtocol = StatisticService()
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
@@ -100,9 +102,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         if currentQuestionIndex == questionsAmount - 1 {
             let viewModelAlert = QuizResultsViewModel(
                 titleAlert: "Этот раунд окончен!",
-                textAlert: "Ваш результат: \(correctAnswers)/10",
+                textAlert: """
+                Ваш результат: \(correctAnswers)/10
+                Количество сыгранных квизов: \(statisticService.gamesCount)
+                Рекорд: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) (\(statisticService.bestGame.date.dateTimeString))
+                Средняя точность: \(String(format: "%.2f",statisticService.totalAccuracy))% 
+                """,
                 buttonTextAlert: "Сыграть ещё раз")
             showResults(quiz: viewModelAlert)
+            statisticService.store(correct: correctAnswers, total: questionsAmount)
         } else {
             currentQuestionIndex += 1
             questionFactory?.requestNextQuestion()
@@ -114,7 +122,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         // блокировка кнопок
         noButton.isEnabled = false
         yesButton.isEnabled = false
-    
+        
         let model = AlertModel(
             titleAlert: result.titleAlert,
             messageAlert: result.textAlert,
@@ -126,7 +134,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             }
         alertPresenter.showResults(in: self, model: model)
     }
-    
     
     //MARK: - IBAction
     @IBAction private func noButtonClicked(_ sender: UIButton) {
@@ -143,3 +150,4 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         showAnswerResult(isCorrect: currentQuestion.correctAnswer)
     }
 }
+
