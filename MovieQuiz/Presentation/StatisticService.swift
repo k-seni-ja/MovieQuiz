@@ -4,22 +4,23 @@
 //
 //  Created by Ксения Штыркова on 10.03.2026.
 //
-import UIKit
+import Foundation
 
 final class StatisticService: StatisticServiceProtocol {
-    // убрать дублирование в коде
-    private let storage: UserDefaults = .standard
-    // cтроковые ключи
+    
     private enum Keys: String {
-        case gamesCount          // Для счётчика сыгранных игр
-        case bestGameCorrect     // Для количества правильных ответов в лучшей игре
-        case bestGameTotal       // Для общего количества вопросов в лучшей игре
-        case bestGameDate        // Для даты лучшей игры
-        case totalCorrectAnswers // Для общего количества правильных ответов за все игры
-        case totalQuestionsAsked // Для общего количества вопросов, заданных за все игры
+        case gamesCount
+        case bestGameCorrect
+        case bestGameTotal
+        case bestGameDate
+        case totalCorrectAnswers
+        case totalQuestionsAsked
     }
     
-    var gamesCount: Int { //общее количество завершенных игр
+    //MARK: - Properties
+    private let storage: UserDefaults = .standard
+    
+    var gamesCount: Int {
         get {
             storage.integer(forKey: Keys.gamesCount.rawValue)
         }
@@ -28,7 +29,7 @@ final class StatisticService: StatisticServiceProtocol {
         }
     }
     
-    var bestGame: GameResult { //лучшая игра (правильные ответы, кол-во вопросов, дата)
+    var bestGame: GameResult {
         get {
             let currentResult = GameResult(
                 correct: storage.integer(forKey: Keys.bestGameCorrect.rawValue),
@@ -43,25 +44,17 @@ final class StatisticService: StatisticServiceProtocol {
         }
     }
     
-    var totalAccuracy: Double { //средняя точность в %
-        get {
-            // общее количество правильных ответов за все игры
-            let totalCorrectAnswers = storage.integer(forKey: Keys.totalCorrectAnswers.rawValue)
-            // общее количество вопросов, заданных за все игры
-            let totalQuestionsAsked = storage.integer(forKey: Keys.totalQuestionsAsked.rawValue)
-            if totalQuestionsAsked == 0 {
-                return 0
-            } else {
-                return (Double(totalCorrectAnswers) / Double(totalQuestionsAsked)) * 100
-            }
-        }
+    var totalAccuracy: Double {
+        let totalCorrectAnswers = storage.integer(forKey: Keys.totalCorrectAnswers.rawValue)
+        let totalQuestionsAsked = storage.integer(forKey: Keys.totalQuestionsAsked.rawValue)
+        return totalQuestionsAsked == 0 ? 0 : (Double(totalCorrectAnswers) / Double(totalQuestionsAsked)) * 100
     }
     
-    // сохранение текущего результата игры
+    //MARK: - Methods
     func store(correct count: Int, total amount: Int) {
-        //обновить количество сыгранных игр
         gamesCount += 1
-        //обновить количество правильных ответов и количество заданных вопросов
+        
+        //обновить сохраненные данные
         let totalCorrectAnswers = storage.integer(forKey: Keys.totalCorrectAnswers.rawValue) + count
         storage.set(totalCorrectAnswers, forKey: Keys.totalCorrectAnswers.rawValue)
         
@@ -70,7 +63,7 @@ final class StatisticService: StatisticServiceProtocol {
         
         // проверить лучший результат на текущий момент
         let currentGame = GameResult(correct: count, total: amount, date: Date())
-        if currentGame.isBetterThan(bestGame) == true {
+        if currentGame.isBetterThan(bestGame) {
             bestGame = currentGame
         }
     }

@@ -5,7 +5,7 @@
 //  Created by Ксения Штыркова on 24.02.2026.
 //
 
-import UIKit
+import Foundation
 
 //MARK: - Mock Data
 
@@ -14,10 +14,10 @@ final class QuestionFactory: QuestionFactoryProtocol {
     weak var delegate: QuestionFactoryDelegate?
     
     func setup(delegate: QuestionFactoryDelegate) {
-            self.delegate = delegate
-        }
+        self.delegate = delegate
+    }
     
-  private let questions: [QuizQuestion] = [
+    private let questions: [QuizQuestion] = [
         QuizQuestion(
             imageName: "The Godfather",
             textQuestion: "Рейтинг этого фильма больше чем 6?",
@@ -59,7 +59,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
             textQuestion: "Рейтинг этого фильма больше чем 6?",
             correctAnswer: false)]
     
-    // выбор случайного вопроса,вызов делегата
+    // выбор вопроса,вызов делегата
     func requestNextQuestion() {
         guard let index = (0..<questions.count).randomElement() else {
             delegate?.didReceiveNextQuestion(question: nil)

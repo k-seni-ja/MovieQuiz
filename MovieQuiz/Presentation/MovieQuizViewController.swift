@@ -10,19 +10,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private weak var yesButton: UIButton!
     
     //MARK: - Properties
-    // индекс текущего вопроса, начальное значение 0
-    private var currentQuestionIndex = 0
-    // счётчик правильных ответов, начальное значение 0
-    private var correctAnswers = 0
-    //общее количество вопросов
-    private let questionsAmount: Int = 10
-    // фабрика вопросов
-    private var questionFactory: QuestionFactoryProtocol?
-    //вопрос, который видит пользователь
     private var currentQuestion: QuizQuestion?
-    // отображение Алерта
+    private var currentQuestionIndex = 0
+    private var correctAnswers = 0
+    private let questionsAmount: Int = 10
+    private var questionFactory: QuestionFactoryProtocol?
     private let alertPresenter = AlertPresenter()
-    // статистика предыдущих игр
     private var statisticService: StatisticServiceProtocol = StatisticService()
     
     //MARK: - Lifecycle
@@ -33,18 +26,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         factory.setup(delegate: self)
         self.questionFactory = factory
         
-        // показать 1 вопрос при загрузке (из фабрики вопросов)
         questionFactory?.requestNextQuestion()
     }
     
     // MARK: - QuestionFactoryDelegate
     func didReceiveNextQuestion(question: QuizQuestion?) {
-        // проверка, что вопрос не nil
-        guard let question = question else {
-            return
-        }
+        guard let question else {return}
         currentQuestion = question
         let viewModel = convert(model: question)
+        
         // обновление UI в главной очереди
         DispatchQueue.main.async { [weak self] in
             self?.showQuestion(quiz: viewModel)
@@ -62,23 +52,19 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // показ состояния экрана "вопрос"
     private func showQuestion(quiz step: QuizStepViewModel) {
-        imageView.image = step.posterImage
-        imageView.layer.cornerRadius = 20
-        textLabel.text = step.question
-        counterLabel.text = step.questionNumber
-        
-        // разблокировка кнопок
         noButton.isEnabled = true
         yesButton.isEnabled = true
         
-        // уберем рамку перед следующим вопросом
+        imageView.image = step.posterImage
+        imageView.layer.cornerRadius = 20
         imageView.layer.borderWidth = 0
         imageView.layer.borderColor = nil
+        textLabel.text = step.question
+        counterLabel.text = step.questionNumber
     }
     
     //  рамка, отображающая результат каждого раунда
     private func showAnswerResult(isCorrect: Bool) {
-        // блокировка кнопок
         noButton.isEnabled = false
         yesButton.isEnabled = false
         
@@ -119,7 +105,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // показ состояния экрана "конец игры"
     func showResults(quiz result: QuizResultsViewModel) {
-        // блокировка кнопок
         noButton.isEnabled = false
         yesButton.isEnabled = false
         
@@ -127,7 +112,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             titleAlert: result.titleAlert,
             messageAlert: result.textAlert,
             buttonTextAlert: result.buttonTextAlert) { [weak self] in
-                guard let self = self else {return}
+                guard let self else {return}
                 self.correctAnswers = 0
                 self.currentQuestionIndex = 0
                 self.questionFactory?.requestNextQuestion()
@@ -137,16 +122,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     //MARK: - IBAction
     @IBAction private func noButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
+        guard let currentQuestion else {return}
         showAnswerResult(isCorrect: !currentQuestion.correctAnswer)
     }
     
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
+        guard let currentQuestion else {return}
         showAnswerResult(isCorrect: currentQuestion.correctAnswer)
     }
 }
