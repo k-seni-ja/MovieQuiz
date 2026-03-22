@@ -99,17 +99,23 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="B3j-b4-wKn">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black (iOS)"/>
                         <constraints>
+                            <constraint firstItem="B3j-b4-wKn" firstAttribute="centerY" secondItem="PdS-vl-7Ls" secondAttribute="centerY" id="3OO-Vm-beB"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="A3D-gu-snk" secondAttribute="trailing" constant="20" id="3nN-gn-aUB"/>
                             <constraint firstItem="A3D-gu-snk" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Sgg-4W-bd5"/>
+                            <constraint firstItem="B3j-b4-wKn" firstAttribute="centerX" secondItem="PdS-vl-7Ls" secondAttribute="centerX" id="XxP-ds-oqX"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="A3D-gu-snk" secondAttribute="bottom" id="Ylc-tG-dbC"/>
                             <constraint firstItem="A3D-gu-snk" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="9.9999999999999716" id="jV2-0I-pv2"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="B3j-b4-wKn" id="uSR-fc-aRs"/>
                         <outlet property="counterLabel" destination="wT3-jR-Ibd" id="r45-sc-zWe"/>
                         <outlet property="imageView" destination="PdS-vl-7Ls" id="saG-Ci-LEv"/>
                         <outlet property="noButton" destination="iJv-Ag-oIE" id="G0G-UE-Xtn"/>

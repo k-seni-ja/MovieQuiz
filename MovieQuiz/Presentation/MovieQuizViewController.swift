@@ -8,12 +8,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private weak var textLabel: UILabel!
     @IBOutlet private weak var noButton: UIButton!
     @IBOutlet private weak var yesButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     //MARK: - Properties
     private var currentQuestion: QuizQuestion?
     private var currentQuestionIndex = 0
-    private var correctAnswers = 0
     private let questionsAmount: Int = 10
+    private var correctAnswers = 0
     private var questionFactory: QuestionFactoryProtocol?
     private let alertPresenter = AlertPresenter()
     private var statisticService: StatisticServiceProtocol = StatisticService()
@@ -95,6 +96,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 Средняя точность: \(String(format: "%.2f",statisticService.totalAccuracy))% 
                 """,
                 buttonTextAlert: "Сыграть ещё раз")
+            
             showResults(quiz: viewModelAlert)
             statisticService.store(correct: correctAnswers, total: questionsAmount)
         } else {
@@ -107,7 +109,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     func showResults(quiz result: QuizResultsViewModel) {
         noButton.isEnabled = false
         yesButton.isEnabled = false
-        
+
         let model = AlertModel(
             titleAlert: result.titleAlert,
             messageAlert: result.textAlert,
@@ -120,6 +122,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         alertPresenter.showResults(in: self, model: model)
     }
     
+    // показ индикатора загрузки данных
+    private func showLoadingIndicator() {
+        activityIndicator.isHidden = false // индикатор загрузки показан
+        activityIndicator.startAnimating() // включаем анимацию
+    }
     //MARK: - IBAction
     @IBAction private func noButtonClicked(_ sender: UIButton) {
         guard let currentQuestion else {return}
