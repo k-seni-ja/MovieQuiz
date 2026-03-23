@@ -10,7 +10,7 @@ import Foundation
 //MARK: - Model data
 
 struct QuizQuestion {
-    let imageName: String
+    let imageData: Data
     let textQuestion: String
     let correctAnswer: Bool
 }
