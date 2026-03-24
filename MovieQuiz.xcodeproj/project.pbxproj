@@ -91,12 +91,12 @@
 		6113423A2B701CF8003FC2A4 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				AA6DFF562F719828005EED7F /* NetworkClient.swift */,
+				AA6DFF5A2F71AF8C005EED7F /* MoviesLoader.swift */,
 				AA5670D92F4E0B980068569A /* QuestionFactory.swift */,
 				AAEFBF422F4F0311002E8B20 /* QuestionFactoryProtocol.swift */,
 				AAEFBF442F50A8EB002E8B20 /* QuestionFactoryDelegate.swift */,
 				AAA1726F2F60471800110A58 /* StatisticServiceProtocol.swift */,
-				AA6DFF562F719828005EED7F /* NetworkClient.swift */,
-				AA6DFF5A2F71AF8C005EED7F /* MoviesLoader.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";

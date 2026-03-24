@@ -27,8 +27,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         let factory = QuestionFactory(moviesLoader: MoviesLoader())
         factory.setup(delegate: self)
         self.questionFactory = factory
-       
-        showLoadingIndicator()
+       // загружаем первый вопрос из сервера
+        self.showLoadingIndicator()
         questionFactory?.loadData()
     }
     
@@ -89,6 +89,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // выбор между состояниями экрана "конец игры" / "вопрос"
     private func showNextQuestionOrResults() {
         if currentQuestionIndex == questionsAmount - 1 {
+            statisticService.store(correct: correctAnswers, total: questionsAmount)
             let viewModelAlert = QuizResultsViewModel(
                 titleAlert: "Этот раунд окончен!",
                 textAlert: """
@@ -100,7 +101,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 buttonTextAlert: "Сыграть ещё раз")
             
             showResults(quiz: viewModelAlert)
-            statisticService.store(correct: correctAnswers, total: questionsAmount)
         } else {
             currentQuestionIndex += 1
             questionFactory?.requestNextQuestion()
@@ -125,13 +125,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // показ индикатора загрузки данных
     private func showLoadingIndicator() {
-        activityIndicator.isHidden = false // индикатор загрузки показан
         activityIndicator.startAnimating() // включаем анимацию
     }
     
-    //Alert с ошибкой загрузки
+    //Alert с ошибкой загрузки из сервера
     private func showNetworkError(message: String) {
-        activityIndicator.isHidden = true // скрываем индикатор загрузки
         
         let model = AlertModel(titleAlert: "Ошибка",
                                messageAlert: message,
@@ -139,19 +137,23 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             guard let self = self else { return }
             self.correctAnswers = 0
             self.currentQuestionIndex = 0
-            self.questionFactory?.requestNextQuestion()
+            self.showLoadingIndicator()
+            self.questionFactory?.loadData()
         }
         alertPresenter.showResults(in: self, model: model)
     }
     
     //сообщение об успешной загрузке данных
     func didLoadDataFromServer() {
-        activityIndicator.isHidden = true // скрываем индикатор загрузки
+        print(" ✅ didLoadDataFromServer вызван")
+        activityIndicator.stopAnimating() // выключаем анимацию
         questionFactory?.requestNextQuestion()
     }
     
     // сообщение об ошибке загрузки
     func didFailToLoadData(with error: Error) {
+        print(" ⛔ didFailToLoadData вызван, ошибка загрузки: \(error.localizedDescription)")
+        activityIndicator.stopAnimating() // выключаем анимацию
         showNetworkError(message: error.localizedDescription) // возьмём в качестве сообщения описание ошибки
     }
     //MARK: - IBAction
