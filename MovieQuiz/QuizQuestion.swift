@@ -5,13 +5,12 @@
 //  Created by Ксения Штыркова on 24.02.2026.
 //
 
-import UIKit
+import Foundation
 
 //MARK: - Model data
 
-// модель вопроса
 struct QuizQuestion {
-    let imageName: String
+    let imageData: Data
     let textQuestion: String
     let correctAnswer: Bool
 }

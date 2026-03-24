@@ -10,9 +10,8 @@ import UIKit
 
 final class AlertPresenter {
     
-    // показ состояния экрана "конец игры"
     func showResults(in controller: UIViewController, model: AlertModel) {
-   
+        
         let alert = UIAlertController(
             title: model.titleAlert,
             message: model.messageAlert,
@@ -21,8 +20,8 @@ final class AlertPresenter {
         let action = UIAlertAction(
             title: model.buttonTextAlert,
             style: .default) { _ in
-            model.completion()
-        }
+                model.completion()
+            }
         
         alert.addAction(action)
         controller.present(alert, animated: true, completion: nil)

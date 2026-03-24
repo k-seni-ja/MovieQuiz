@@ -5,13 +5,12 @@
 //  Created by Ксения Штыркова on 24.02.2026.
 //
 
-import UIKit
+import Foundation
 
 //MARK: - View Models
 
-// состояние экрана "Результат квиза"
 struct QuizResultsViewModel {
     let titleAlert: String
-    let textAlert: String // итоговое количество набранных очков
+    let textAlert: String
     let buttonTextAlert: String
 }
