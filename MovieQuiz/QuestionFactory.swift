@@ -9,6 +9,11 @@ import Foundation
 
 //MARK: - Mock Data
 final class QuestionFactory: QuestionFactoryProtocol {
+    // переключатель true = mock, false = API
+    static var useMockData: Bool = true
+    
+    private var movies: [MostPopularMovie] = []
+    private let moviesLoader: MoviesLoading
     weak var delegate: QuestionFactoryDelegate?
     func setup(delegate: QuestionFactoryDelegate) {
         self.delegate = delegate
@@ -17,10 +22,18 @@ final class QuestionFactory: QuestionFactoryProtocol {
     init(moviesLoader: MoviesLoading) {
         self.moviesLoader = moviesLoader
     }
-    private let moviesLoader: MoviesLoading
-    private var movies: [MostPopularMovie] = []
+    
     
     func loadData() {
+        // загрузка из mock-данных, когда переключатель useMockData = true
+        if QuestionFactory.useMockData {
+            DispatchQueue.main.async { [weak self] in
+                self?.movies = MockData.movies //сохраняем массив mock-фильмов в нашу новую переменную
+                self?.delegate?.didLoadDataFromServer() // сообщаем, что данные загрузились нашему MovieQuizViewController
+            }
+            return
+        }
+        // загрузка из API
         moviesLoader.loadMovies { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
@@ -28,7 +41,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
                 case .success(let mostPopularMovies):
                     print(" 🎞️ loadData вызван, фильмы загрузились: \(mostPopularMovies.items.count)")
                     self.movies = mostPopularMovies.items // сохраняем фильм в нашу новую переменную
-                    self.delegate?.didLoadDataFromServer() // сообщаем, что данные загрузились
+                    self.delegate?.didLoadDataFromServer() // сообщаем, что данные загрузились нашему MovieQuizViewController
                 case .failure(let error):
                     print(" ‼️ loadData вызван, ошибка загрузки фильмов: \(error)")
                     self.delegate?.didFailToLoadData(with: error) // сообщаем об ошибке нашему MovieQuizViewController

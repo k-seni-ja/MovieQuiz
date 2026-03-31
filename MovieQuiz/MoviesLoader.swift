@@ -7,10 +7,7 @@
 
 import Foundation
 
-protocol MoviesLoading {
-    func loadMovies(handler: @escaping (Result<MostPopularMovies, Error>) -> Void)
-}
-
+// Преобразование загруженных из сервера данных в модель данных
 struct MoviesLoader: MoviesLoading {
     
     // MARK: - NetworkClient
@@ -38,7 +35,6 @@ struct MoviesLoader: MoviesLoading {
             case .success(let data): // данные пришли
                 do {
                     let mostPopularMovies = try JSONDecoder().decode(MostPopularMovies.self, from: data) // десериализация фильма
-                    
                     // проверка ошибки от API
                     if !mostPopularMovies.errorMessage.isEmpty {
                         print("⁉️ Ошибка API: \(mostPopularMovies.errorMessage)")

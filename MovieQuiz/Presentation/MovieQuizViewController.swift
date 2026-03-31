@@ -8,7 +8,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private weak var textLabel: UILabel!
     @IBOutlet private weak var noButton: UIButton!
     @IBOutlet private weak var yesButton: UIButton!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     
     //MARK: - Properties
     private var currentQuestion: QuizQuestion?
@@ -23,10 +23,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         imageView.layer.cornerRadius = 20
+        
         // внедрение зависимости делегату
         let factory = QuestionFactory(moviesLoader: MoviesLoader())
         factory.setup(delegate: self)
         self.questionFactory = factory
+        
        // загружаем первый вопрос из сервера
         self.showLoadingIndicator()
         questionFactory?.loadData()

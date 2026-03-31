@@ -12,7 +12,6 @@ struct MostPopularMovies: Codable {
     let errorMessage: String
 }
 
-
 struct MostPopularMovie: Codable {
     let title: String
     let rating: String
