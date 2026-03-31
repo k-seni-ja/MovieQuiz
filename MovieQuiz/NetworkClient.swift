@@ -7,7 +7,7 @@
 import Foundation
 
 // Отправка HTTP запросов, получение данных
-struct NetworkClient {
+struct NetworkClient: NetworkRouting {
     
     private enum NetworkError: Error {
         case codeError
