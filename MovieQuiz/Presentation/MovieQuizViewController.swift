@@ -102,7 +102,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 """,
                 buttonTextAlert: "Сыграть ещё раз")
             
-            showResults(quiz: viewModelAlert)
+            showGameResult(quiz: viewModelAlert)
         } else {
             currentQuestionIndex += 1
             questionFactory?.requestNextQuestion()
@@ -110,13 +110,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     // показ состояния экрана "конец игры"
-    private func showResults(quiz result: QuizResultsViewModel) {
+    private func showGameResult(quiz result: QuizResultsViewModel) {
         noButton.isEnabled = false
         yesButton.isEnabled = false
         
         let model = AlertModel(titleAlert: result.titleAlert,
                                messageAlert: result.textAlert,
-                               buttonTextAlert: result.buttonTextAlert) { [weak self] in
+                               buttonTextAlert: result.buttonTextAlert,
+                               accessibilityIdentifier: "Game result") { [weak self] in
             guard let self else {return}
             self.correctAnswers = 0
             self.currentQuestionIndex = 0
@@ -135,7 +136,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         let model = AlertModel(titleAlert: "Ошибка",
                                messageAlert: message,
-                               buttonTextAlert: "Попробовать еще раз") { [weak self] in
+                               buttonTextAlert: "Попробовать еще раз",
+                               accessibilityIdentifier: "Loading error") { [weak self] in
             guard let self = self else { return }
             self.correctAnswers = 0
             self.currentQuestionIndex = 0

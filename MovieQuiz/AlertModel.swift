@@ -13,5 +13,6 @@ struct AlertModel {
     let titleAlert: String
     let messageAlert: String
     let buttonTextAlert: String
+    let accessibilityIdentifier: String
     let completion: () -> Void
 }
