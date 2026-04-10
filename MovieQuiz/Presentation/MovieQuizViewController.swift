@@ -12,12 +12,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     //MARK: - Properties
     private var currentQuestion: QuizQuestion?
-    private var currentQuestionIndex = 0
-    private let questionsAmount: Int = 10
     private var correctAnswers = 0
     private var questionFactory: QuestionFactoryProtocol?
     private let alertPresenter = AlertPresenter()
     private var statisticService: StatisticServiceProtocol = StatisticService()
+    private let presenter = MovieQuizPresenter()
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
@@ -38,7 +37,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     func didReceiveNextQuestion(question: QuizQuestion?) {
         guard let question else {return}
         currentQuestion = question
-        let viewModel = convert(model: question)
+        let viewModel = presenter.convert(model: question)
         
         // обновление UI в главной очереди
         DispatchQueue.main.async { [weak self] in
@@ -46,21 +45,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
     }
     //MARK: - Methods
-    // конвертируем модель данных questions[currentQuestionIndex] во View Model (готовим данные для отображения)
-    private func convert (model: QuizQuestion) -> QuizStepViewModel {
-        let questionStep = QuizStepViewModel(
-            posterImage: UIImage(data: model.imageData) ?? UIImage(),
-            question: model.textQuestion,
-            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
-        return questionStep
-    }
     
     // показ состояния экрана "вопрос"
     private func showQuestion(quiz step: QuizStepViewModel) {
         noButton.isEnabled = true
         yesButton.isEnabled = true
         
-        imageView.image = step.posterImage
+        imageView.image = UIImage(data: step.posterImage) ?? UIImage() // преобразуем Data в UIImage
         imageView.layer.cornerRadius = 20
         imageView.layer.borderWidth = 0
         imageView.layer.borderColor = nil
@@ -90,8 +81,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // выбор между состояниями экрана "конец игры" / "вопрос"
     private func showNextQuestionOrResults() {
-        if currentQuestionIndex == questionsAmount - 1 {
-            statisticService.store(correct: correctAnswers, total: questionsAmount)
+        if presenter.isLastQuestion() {
+            statisticService.store(correct: correctAnswers, total: presenter.questionsAmount)
             let viewModelAlert = QuizResultsViewModel(
                 titleAlert: "Этот раунд окончен!",
                 textAlert: """
@@ -104,7 +95,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             
             showGameResult(quiz: viewModelAlert)
         } else {
-            currentQuestionIndex += 1
+            presenter.switchToNextQuestion()
             questionFactory?.requestNextQuestion()
         }
     }
@@ -120,7 +111,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                                accessibilityIdentifier: "Game result") { [weak self] in
             guard let self else {return}
             self.correctAnswers = 0
-            self.currentQuestionIndex = 0
+            presenter.resetQuestionIndex()
             self.questionFactory?.requestNextQuestion()
         }
         alertPresenter.showResults(in: self, model: model)
@@ -140,7 +131,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                                accessibilityIdentifier: "Loading error") { [weak self] in
             guard let self = self else { return }
             self.correctAnswers = 0
-            self.currentQuestionIndex = 0
+            presenter.resetQuestionIndex()
             self.showLoadingIndicator()
             self.questionFactory?.loadData()
         }

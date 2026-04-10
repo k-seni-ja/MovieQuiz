@@ -48,13 +48,13 @@ final class MovieQuizUITests: XCTestCase {
         sleep(3)
         
         let firstPoster = app.images["Poster"]
-        let firstPosterData = firstPoster.screenshot().pngRepresentation // преобразуем объект  класса XCUIElement в тип Data
+        let firstPosterData = firstPoster.screenshot().pngRepresentation
         
         app.buttons["No"].tap()
         sleep(3)
         
         let secondPoster = app.images["Poster"]
-        let secondPosterData = secondPoster.screenshot().pngRepresentation // преобразуем объект  класса XCUIElement в тип Data
+        let secondPosterData = secondPoster.screenshot().pngRepresentation
         
         let indexLabel = app.staticTexts["Index"]
         XCTAssertFalse(firstPosterData == secondPosterData)

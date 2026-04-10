@@ -7,7 +7,6 @@
 
 import Foundation
 
-//MARK: - Mock Data
 final class QuestionFactory: QuestionFactoryProtocol {
     // переключатель true = mock, false = API
     static var useMockData: Bool = true
@@ -55,6 +54,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
         let rating = Float(movie.rating) ?? 0
         // генерируем сравнение
         let isGreaterThan = Bool.random() //true - больше чем, false - меньше чем
+        
         // выбор случайного смещения для порога (+-0.5, +-1.0, +-1.5)
         let offsets: [Float] = [0.5, 1.0, 1.5]
             let randomOffset = offsets.randomElement() ?? 0.5

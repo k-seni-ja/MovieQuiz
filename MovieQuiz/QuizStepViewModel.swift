@@ -9,7 +9,7 @@ import UIKit
 //MARK: - View Models
 
 struct QuizStepViewModel {
-    let posterImage: UIImage
+    let posterImage: Data
     let question: String
     let questionNumber: String
 }
