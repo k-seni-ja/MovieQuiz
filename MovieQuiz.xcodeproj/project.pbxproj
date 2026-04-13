@@ -165,15 +165,15 @@
 			isa = PBXGroup;
 			children = (
 				AA5BE8212F88C758002E3897 /* QuestionFactory.swift */,
-				AA5BE8222F88C758002E3897 /* QuestionFactoryProtocol.swift */,
 				AA5BE8232F88C758002E3897 /* QuestionFactoryDelegate.swift */,
+				AA5BE8222F88C758002E3897 /* QuestionFactoryProtocol.swift */,
 				AA5BE8422F88CCCF002E3897 /* StatisticService.swift */,
 				AA5BE8252F88C758002E3897 /* StatisticServiceProtocol.swift */,
 				AA5BE81D2F88C758002E3897 /* NetworkClient.swift */,
 				AA5BE81F2F88C758002E3897 /* MoviesLoader.swift */,
+				AA5BE8242F88C758002E3897 /* MoviesLoadingProtocol.swift */,
 				AA5BE81E2F88C758002E3897 /* StubNetworkClient.swift */,
 				AA5BE8202F88C758002E3897 /* MockMoviesLoader.swift */,
-				AA5BE8242F88C758002E3897 /* MoviesLoadingProtocol.swift */,
 				AA5BE8262F88C758002E3897 /* NetworkRoutingProtocol.swift */,
 			);
 			path = Services;
