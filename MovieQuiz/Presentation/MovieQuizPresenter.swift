@@ -15,9 +15,9 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     //MARK: - State
     private let questionsAmount: Int = 10
-    private var currentQuestionIndex = 0
     private var currentQuestion: QuizQuestion?
-    private var correctAnswers = 0
+    var currentQuestionIndex = 0
+    var correctAnswers = 0
     
     // MARK: - init
     init(viewController: MovieQuizViewControllerProtocol) {

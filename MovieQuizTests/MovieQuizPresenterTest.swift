@@ -13,6 +13,7 @@ import XCTest
 // создаем фиктивный ViewController, который реализует протокол
 
 final class MovieQuizViewControllerMock: MovieQuizViewControllerProtocol {
+    
     func showQuestion(quiz step: QuizStepViewModel) {}
     func showGameResult(quiz result: QuizResultsViewModel) {}
     func highlightImageBorder(isCorrectAnswer: Bool) {}
@@ -45,6 +46,22 @@ final class MovieQuizPresenterTests: XCTestCase {
         XCTAssertEqual(viewModel.posterImage, emptyData)    //convert не потерял данные картинки
         XCTAssertEqual(viewModel.question, "Question Text")  //convert не изменил текст вопроса
         XCTAssertEqual(viewModel.questionNumber, "1/10")     //convert посчитал номер вопроса правильно
+    }
+    
+    func testRestartGameResetsState() throws {
+        // Given
+        let viewControllerMock = MovieQuizViewControllerMock()
+        let presenter = MovieQuizPresenter(viewController: viewControllerMock)
+        presenter.currentQuestionIndex = 5
+        presenter.correctAnswers = 3
+        
+        //When
+        presenter.restartGame()
+        
+        //Then
+        XCTAssertEqual(presenter.correctAnswers, 0)
+        XCTAssertEqual(presenter.currentQuestionIndex, 0)
+        
     }
 }
 

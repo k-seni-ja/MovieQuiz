@@ -54,22 +54,20 @@ final class QuestionFactory: QuestionFactoryProtocol {
         // генерируем сравнение
         let isGreaterThan = Bool.random() //true - больше чем, false - меньше чем
         
-        // выбор случайного смещения для порога (+-0.5, +-1.0, +-1.5)
-        let offsets: [Float] = [0.5, 1.0, 1.5]
-        let randomOffset = offsets.randomElement() ?? 0.5
+        // выбор случайного смещения для порога ( +- 0.1, +-0.5, +-1.0, +-1.5, +-5.0)
+        let offsets: [Float] = [0.1, 0.5, 1.0, 1.5, 5.0]
+        let randomOffset = offsets.randomElement() ?? 0.2
         var threshold: Float
         var correctAnswer: Bool
         
         if isGreaterThan {
             // Вопрос "больше чем X?" — порог ниже рейтинга
-            threshold = rating - randomOffset
-            threshold = max(0, threshold)
+            threshold = max(0, rating - randomOffset)
             // Правильный ответ: true, если рейтинг фильма больше порога
             correctAnswer = rating > threshold
         } else {
             // Вопрос "меньше чем X?" — порог выше рейтинга
-            threshold = rating + randomOffset
-            threshold = min(10, threshold)
+            threshold = min(10, rating + randomOffset)
             // Правильный ответ: true, если рейтинг фильма меньше порога
             correctAnswer = rating < threshold
         }
