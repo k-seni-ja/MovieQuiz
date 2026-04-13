@@ -8,7 +8,8 @@
 import Foundation
 
 final class QuestionFactory: QuestionFactoryProtocol {
-    // переключатель true = mock, false = API
+  
+    // 🔁 переключатель true = mock, false = API 🔁
     static var useMockData: Bool = true
     
     private var movies: [MostPopularMovie] = []

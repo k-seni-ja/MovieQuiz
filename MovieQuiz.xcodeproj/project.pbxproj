@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA2B67FB2F8CF7AB00D4D8C4 /* MovieQuizViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B67FA2F8CF7AB00D4D8C4 /* MovieQuizViewControllerProtocol.swift */; };
 		AA5670DC2F4E1F150068569A /* QuizStepViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5670DB2F4E1F150068569A /* QuizStepViewModel.swift */; };
 		AA5670DE2F4E1F460068569A /* QuizResultsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5670DD2F4E1F460068569A /* QuizResultsViewModel.swift */; };
 		AA5670E02F4E1F750068569A /* QuizQuestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5670DF2F4E1F750068569A /* QuizQuestion.swift */; };
@@ -58,6 +59,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA2B67FA2F8CF7AB00D4D8C4 /* MovieQuizViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MovieQuizViewControllerProtocol.swift; path = MovieQuiz/MovieQuizViewControllerProtocol.swift; sourceTree = SOURCE_ROOT; };
 		AA5670DB2F4E1F150068569A /* QuizStepViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuizStepViewModel.swift; path = MovieQuiz/QuizStepViewModel.swift; sourceTree = SOURCE_ROOT; };
 		AA5670DD2F4E1F460068569A /* QuizResultsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuizResultsViewModel.swift; path = MovieQuiz/QuizResultsViewModel.swift; sourceTree = SOURCE_ROOT; };
 		AA5670DF2F4E1F750068569A /* QuizQuestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = QuizQuestion.swift; path = MovieQuiz/QuizQuestion.swift; sourceTree = SOURCE_ROOT; };
@@ -175,6 +177,7 @@
 				AA5BE81E2F88C758002E3897 /* StubNetworkClient.swift */,
 				AA5BE8202F88C758002E3897 /* MockMoviesLoader.swift */,
 				AA5BE8262F88C758002E3897 /* NetworkRoutingProtocol.swift */,
+				AA2B67FA2F8CF7AB00D4D8C4 /* MovieQuizViewControllerProtocol.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -400,6 +403,7 @@
 			files = (
 				AD5EE5DE284D7887003966EF /* UIColor+Extensions.swift in Sources */,
 				AA6DFF592F71AB5C005EED7F /* MostPopularMovies.swift in Sources */,
+				AA2B67FB2F8CF7AB00D4D8C4 /* MovieQuizViewControllerProtocol.swift in Sources */,
 				AD7AFA552836189F00399704 /* Array+Extensions.swift in Sources */,
 				AAA172722F604A1100110A58 /* GameResult.swift in Sources */,
 				AAC5CB1B2F56E0760095FA08 /* AlertModel.swift in Sources */,

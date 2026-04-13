@@ -25,7 +25,7 @@ final class MovieQuizUITests: XCTestCase {
     }
     
     // запросы выполняются с корректным API Key
-    // в mock всего 2 фильма, поэтому сравнение постеров может выдавать "Test failed" ⛔️ из-за рандомного выбора фильма из массива
+    // в mock мало фильмов, поэтому сравнение постеров может выдавать "Test failed" ⛔️ из-за рандомного выбора одинаковых фильмов
     
     func testYesButton() {
         sleep(3)
@@ -34,7 +34,7 @@ final class MovieQuizUITests: XCTestCase {
         let firstPosterData = firstPoster.screenshot().pngRepresentation // преобразуем объект  класса XCUIElement в тип Data
         
         app.buttons["Yes"].tap()
-        sleep(3)
+        sleep(5)
         
         let secondPoster = app.images["Poster"]
         let secondPosterData = secondPoster.screenshot().pngRepresentation // преобразуем объект  класса XCUIElement в тип Data
@@ -51,7 +51,7 @@ final class MovieQuizUITests: XCTestCase {
         let firstPosterData = firstPoster.screenshot().pngRepresentation
         
         app.buttons["No"].tap()
-        sleep(3)
+        sleep(5)
         
         let secondPoster = app.images["Poster"]
         let secondPosterData = secondPoster.screenshot().pngRepresentation
@@ -70,7 +70,7 @@ final class MovieQuizUITests: XCTestCase {
         }
         
         let alert = app.alerts["Game result"]
-        sleep(3)
+        sleep(5)
         
         XCTAssertTrue(alert.exists)
         XCTAssertEqual(alert.label, "Этот раунд окончен!")

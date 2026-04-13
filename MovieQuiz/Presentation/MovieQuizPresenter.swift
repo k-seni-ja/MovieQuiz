@@ -8,15 +8,19 @@
 import Foundation
 
 final class MovieQuizPresenter: QuestionFactoryDelegate {
-    private weak var viewController: MovieQuizViewController?
+    //MARK: - Dependencies
+    private weak var viewController: MovieQuizViewControllerProtocol?
     private var questionFactory: QuestionFactoryProtocol?
     private var statisticService: StatisticServiceProtocol
+    
+    //MARK: - State
     private let questionsAmount: Int = 10
     private var currentQuestionIndex = 0
     private var currentQuestion: QuizQuestion?
     private var correctAnswers = 0
     
-    init(viewController: MovieQuizViewController) {
+    // MARK: - init
+    init(viewController: MovieQuizViewControllerProtocol) {
         self.statisticService = StatisticService()
         self.questionFactory = QuestionFactory(delegate: self, moviesLoader: MoviesLoader())
         self.viewController = viewController
@@ -36,15 +40,33 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         }
     }
     
-    //MARK: - Methods
+    //сообщение об успешной загрузке данных
+    func didLoadDataFromServer() {
+        print(" ✅ didLoadDataFromServer вызван")
+        viewController?.hideLoadingIndicator()
+        questionFactory?.requestNextQuestion()
+    }
     
-    // конвертируем модель данных questions[currentQuestionIndex] во View Model (готовим данные для отображения)
-    private func convert (model: QuizQuestion) -> QuizStepViewModel {
-        let questionStep = QuizStepViewModel(
-            posterImage: model.imageData,
-            question: model.textQuestion,
-            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
-        return questionStep
+    // сообщение об ошибке загрузки
+    func didFailToLoadData(with error: Error) {
+        print(" ⛔ didFailToLoadData вызван, ошибка загрузки: \(error.localizedDescription)")
+        viewController?.hideLoadingIndicator()
+        viewController?.showNetworkError(message: error.localizedDescription) // возьмём в качестве сообщения описание ошибки
+    }
+    
+    //MARK: - Methods
+    func restartGame() {
+        currentQuestionIndex = 0
+        correctAnswers = 0
+        questionFactory?.requestNextQuestion()
+    }
+    
+    func noButtonClicked() {
+        didAnswer(isYes: false)
+    }
+    
+    func yesButtonClicked() {
+        didAnswer(isYes: true)
     }
     
     private func isLastQuestion () -> Bool {
@@ -53,6 +75,27 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     private func switchToNextQuestion() {
         currentQuestionIndex += 1
+    }
+    
+    private func didAnswer(isCorrectAnswer: Bool) {
+        if isCorrectAnswer {
+            correctAnswers += 1
+        }
+    }
+    
+    private func didAnswer (isYes: Bool) {
+        guard let currentQuestion else {return}
+        let givenAnswer = isYes
+        proceedWithAnswer(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+    }
+    
+    // конвертируем модель данных QuizQuestion во View Model (готовим данные для отображения)
+    func convert (model: QuizQuestion) -> QuizStepViewModel {
+        let questionStep = QuizStepViewModel(
+            posterImage: model.imageData,
+            question: model.textQuestion,
+            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
+        return questionStep
     }
     
     // выбор между состояниями экрана "конец игры" / "вопрос"
@@ -80,7 +123,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     //  рамка, отображающая результат каждого раунда
     private func proceedWithAnswer(isCorrect: Bool) {
         didAnswer(isCorrectAnswer: isCorrect)
-        viewController?.highlightImageBorder(isCorrect: isCorrect)
+        viewController?.highlightImageBorder(isCorrectAnswer: isCorrect)
         
         // запускаем задачу через 1 секунду c помощью диспетчера задач
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {[weak self] in
@@ -88,45 +131,5 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             // код, который мы хотим вызвать через 1 секунду
             self.proceedToNextQuestionOrResults()
         }
-    }
-    
-    private func didAnswer(isCorrectAnswer: Bool) {
-        if isCorrectAnswer {
-            correctAnswers += 1
-        }
-    }
-    
-    private func didAnswer (isYes: Bool) {
-        guard let currentQuestion else {return}
-        let givenAnswer = isYes
-        proceedWithAnswer(isCorrect: givenAnswer == currentQuestion.correctAnswer)
-    }
-    
-    func restartGame() {
-        currentQuestionIndex = 0
-        correctAnswers = 0
-        questionFactory?.requestNextQuestion()
-    }
-    
-    //сообщение об успешной загрузке данных
-    func didLoadDataFromServer() {
-        print(" ✅ didLoadDataFromServer вызван")
-        viewController?.hideLoadingIndicator()
-        questionFactory?.requestNextQuestion()
-    }
-    
-    // сообщение об ошибке загрузки
-    func didFailToLoadData(with error: Error) {
-        print(" ⛔ didFailToLoadData вызван, ошибка загрузки: \(error.localizedDescription)")
-        viewController?.hideLoadingIndicator()
-        viewController?.showNetworkError(message: error.localizedDescription) // возьмём в качестве сообщения описание ошибки
-    }
-    
-    func noButtonClicked() {
-        didAnswer(isYes: false)
-    }
-    
-    func yesButtonClicked() {
-        didAnswer(isYes: true)
     }
 }

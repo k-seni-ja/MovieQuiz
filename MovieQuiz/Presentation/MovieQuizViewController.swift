@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
     
     //MARK: - IBOutlets
     @IBOutlet private weak var counterLabel: UILabel!
@@ -24,11 +24,6 @@ final class MovieQuizViewController: UIViewController {
         imageView.layer.cornerRadius = 20
     }
     
-    // MARK: - QuestionFactoryDelegate
-    private func didReceiveNextQuestion(question: QuizQuestion?) {
-        presenter?.didReceiveNextQuestion(question: question)
-    }
-    
     //MARK: - Methods
     
     // показ состояния экрана "вопрос"
@@ -45,13 +40,13 @@ final class MovieQuizViewController: UIViewController {
     }
     
     //  рамка, отображающая результат каждого раунда
-    func highlightImageBorder (isCorrect: Bool) {
+    func highlightImageBorder(isCorrectAnswer: Bool) {
         noButton.isEnabled = false
         yesButton.isEnabled = false
         
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
-        imageView.layer.borderColor = isCorrect ? UIColor.ypGreenIOS.cgColor : UIColor.ypRedIOS.cgColor
+        imageView.layer.borderColor = isCorrectAnswer ? UIColor.ypGreenIOS.cgColor : UIColor.ypRedIOS.cgColor
     }
     // показ состояния экрана "конец игры"
     func showGameResult(quiz result: QuizResultsViewModel) {
@@ -88,7 +83,7 @@ final class MovieQuizViewController: UIViewController {
     }
     
     //сообщение об успешной загрузке данных
-    func hideLoadingIndicator () {
+    func hideLoadingIndicator() {
         activityIndicator.stopAnimating() // выключаем анимацию
     }
     //MARK: - IBAction
