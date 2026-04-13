@@ -7,15 +7,22 @@
 
 import Foundation
 
-final class MovieQuizPresenter {
-    //ссылка на MovieQuizViewController
-    weak var viewController: MovieQuizViewController?
-    
-    var currentQuestion: QuizQuestion?
-    let questionsAmount: Int = 10
+final class MovieQuizPresenter: QuestionFactoryDelegate {
+    private weak var viewController: MovieQuizViewController?
+    private var questionFactory: QuestionFactoryProtocol?
+    private var statisticService: StatisticServiceProtocol
+    private let questionsAmount: Int = 10
     private var currentQuestionIndex = 0
-    var correctAnswers = 0
-    var questionFactory: QuestionFactoryProtocol?
+    private var currentQuestion: QuizQuestion?
+    private var correctAnswers = 0
+    
+    init(viewController: MovieQuizViewController) {
+        self.statisticService = StatisticService()
+        self.questionFactory = QuestionFactory(delegate: self, moviesLoader: MoviesLoader())
+        self.viewController = viewController
+        viewController.showLoadingIndicator()
+        questionFactory?.loadData()
+    }
     
     // MARK: - QuestionFactoryDelegate
     func didReceiveNextQuestion(question: QuizQuestion?) {
@@ -30,8 +37,9 @@ final class MovieQuizPresenter {
     }
     
     //MARK: - Methods
+    
     // конвертируем модель данных questions[currentQuestionIndex] во View Model (готовим данные для отображения)
-    func convert (model: QuizQuestion) -> QuizStepViewModel {
+    private func convert (model: QuizQuestion) -> QuizStepViewModel {
         let questionStep = QuizStepViewModel(
             posterImage: model.imageData,
             question: model.textQuestion,
@@ -39,45 +47,79 @@ final class MovieQuizPresenter {
         return questionStep
     }
     
-    func isLastQuestion () -> Bool {
+    private func isLastQuestion () -> Bool {
         currentQuestionIndex == questionsAmount - 1
     }
     
-    func resetQuestionIndex() {
-        currentQuestionIndex = 0
-    }
-    
-    func switchToNextQuestion() {
+    private func switchToNextQuestion() {
         currentQuestionIndex += 1
     }
     
     // выбор между состояниями экрана "конец игры" / "вопрос"
-    func showNextQuestionOrResults() {
+    private func proceedToNextQuestionOrResults() {
         if self.isLastQuestion() {
-            guard let viewController = self.viewController else {return}
-            viewController.statisticService.store(correct: correctAnswers, total: self.questionsAmount)
+            statisticService.store(correct: correctAnswers, total: self.questionsAmount)
             
             let viewModelAlert = QuizResultsViewModel(
                 titleAlert: "Этот раунд окончен!",
                 textAlert: """
                 Ваш результат: \(correctAnswers)/10
-                Количество сыгранных квизов: \(viewController.statisticService.gamesCount)
-                Рекорд: \(viewController.statisticService.bestGame.correct)/\(viewController.statisticService.bestGame.total) (\(viewController.statisticService.bestGame.date.dateTimeString))
-                Средняя точность: \(String(format: "%.2f", viewController.statisticService.totalAccuracy))% 
+                Количество сыгранных квизов: \(statisticService.gamesCount)
+                Рекорд: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) (\(statisticService.bestGame.date.dateTimeString))
+                Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))% 
                 """,
                 buttonTextAlert: "Сыграть ещё раз")
             
-            viewController.showGameResult(quiz: viewModelAlert)
+            viewController?.showGameResult(quiz: viewModelAlert)
         } else {
             self.switchToNextQuestion()
             questionFactory?.requestNextQuestion()
         }
     }
     
+    //  рамка, отображающая результат каждого раунда
+    private func proceedWithAnswer(isCorrect: Bool) {
+        didAnswer(isCorrectAnswer: isCorrect)
+        viewController?.highlightImageBorder(isCorrect: isCorrect)
+        
+        // запускаем задачу через 1 секунду c помощью диспетчера задач
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {[weak self] in
+            guard let self = self else {return}
+            // код, который мы хотим вызвать через 1 секунду
+            self.proceedToNextQuestionOrResults()
+        }
+    }
+    
+    private func didAnswer(isCorrectAnswer: Bool) {
+        if isCorrectAnswer {
+            correctAnswers += 1
+        }
+    }
+    
     private func didAnswer (isYes: Bool) {
         guard let currentQuestion else {return}
         let givenAnswer = isYes
-        viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        proceedWithAnswer(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+    }
+    
+    func restartGame() {
+        currentQuestionIndex = 0
+        correctAnswers = 0
+        questionFactory?.requestNextQuestion()
+    }
+    
+    //сообщение об успешной загрузке данных
+    func didLoadDataFromServer() {
+        print(" ✅ didLoadDataFromServer вызван")
+        viewController?.hideLoadingIndicator()
+        questionFactory?.requestNextQuestion()
+    }
+    
+    // сообщение об ошибке загрузки
+    func didFailToLoadData(with error: Error) {
+        print(" ⛔ didFailToLoadData вызван, ошибка загрузки: \(error.localizedDescription)")
+        viewController?.hideLoadingIndicator()
+        viewController?.showNetworkError(message: error.localizedDescription) // возьмём в качестве сообщения описание ошибки
     }
     
     func noButtonClicked() {

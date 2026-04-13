@@ -10,7 +10,7 @@ struct StubNetworkClient: NetworkRouting {
     let emulateError: Bool // заглушка эмулирует либо ошибку сети, либо успешный ответ
     
     enum TestError: Error { // тестовая ошибка
-    case test
+        case test
     }
     
     func fetch(url: URL, handler: @escaping (Result<Data, Error>) -> Void) {

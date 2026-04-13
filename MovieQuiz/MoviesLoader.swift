@@ -8,7 +8,7 @@
 import Foundation
 
 // Преобразование загруженных из сервера данных в модель данных
-struct MoviesLoader: MoviesLoading {
+struct MoviesLoader: MoviesLoadingProtocol {
     
     // MARK: - NetworkClient
     private let networkClient: NetworkRouting

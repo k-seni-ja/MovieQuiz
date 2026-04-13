@@ -12,13 +12,11 @@ final class QuestionFactory: QuestionFactoryProtocol {
     static var useMockData: Bool = true
     
     private var movies: [MostPopularMovie] = []
-    private let moviesLoader: MoviesLoading
+    private let moviesLoader: MoviesLoadingProtocol
     weak var delegate: QuestionFactoryDelegate?
-    func setup(delegate: QuestionFactoryDelegate) {
-        self.delegate = delegate
-    }
     
-    init(moviesLoader: MoviesLoading) {
+    init(delegate: QuestionFactoryDelegate, moviesLoader: MoviesLoadingProtocol) {
+        self.delegate = delegate
         self.moviesLoader = moviesLoader
     }
     
@@ -57,33 +55,33 @@ final class QuestionFactory: QuestionFactoryProtocol {
         
         // выбор случайного смещения для порога (+-0.5, +-1.0, +-1.5)
         let offsets: [Float] = [0.5, 1.0, 1.5]
-            let randomOffset = offsets.randomElement() ?? 0.5
-            var threshold: Float
-            var correctAnswer: Bool
-            
-            if isGreaterThan {
-                // Вопрос "больше чем X?" — порог ниже рейтинга
-                threshold = rating - randomOffset
-                threshold = max(0, threshold)
-                // Правильный ответ: true, если рейтинг фильма больше порога
-                correctAnswer = rating > threshold
-            } else {
-                // Вопрос "меньше чем X?" — порог выше рейтинга
-                threshold = rating + randomOffset
-                threshold = min(10, threshold)
-                // Правильный ответ: true, если рейтинг фильма меньше порога
-                correctAnswer = rating < threshold
-            }
-            
-            // Округляем порог до десятых
-            let roundedThreshold = String(format: "%.1f", threshold)
-            
-            // Формируем текст вопроса
-            let questionText = isGreaterThan
-                ? "Рейтинг этого фильма больше чем \(roundedThreshold)?"
-                : "Рейтинг этого фильма меньше чем \(roundedThreshold)?"
-            return (text: questionText, correctAnswer: correctAnswer)
+        let randomOffset = offsets.randomElement() ?? 0.5
+        var threshold: Float
+        var correctAnswer: Bool
+        
+        if isGreaterThan {
+            // Вопрос "больше чем X?" — порог ниже рейтинга
+            threshold = rating - randomOffset
+            threshold = max(0, threshold)
+            // Правильный ответ: true, если рейтинг фильма больше порога
+            correctAnswer = rating > threshold
+        } else {
+            // Вопрос "меньше чем X?" — порог выше рейтинга
+            threshold = rating + randomOffset
+            threshold = min(10, threshold)
+            // Правильный ответ: true, если рейтинг фильма меньше порога
+            correctAnswer = rating < threshold
         }
+        
+        // Округляем порог до десятых
+        let roundedThreshold = String(format: "%.1f", threshold)
+        
+        // Формируем текст вопроса
+        let questionText = isGreaterThan
+        ? "Рейтинг этого фильма больше чем \(roundedThreshold)?"
+        : "Рейтинг этого фильма меньше чем \(roundedThreshold)?"
+        return (text: questionText, correctAnswer: correctAnswer)
+    }
     
     func requestNextQuestion() {
         // проверим наличие фильмов в массиве

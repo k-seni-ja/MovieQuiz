@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MockMoviesLoader: MoviesLoading {
+struct MockMoviesLoader: MoviesLoadingProtocol {
     
     enum MockError: Error {
         case noData
