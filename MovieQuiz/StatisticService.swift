@@ -29,9 +29,9 @@ final class StatisticService: StatisticServiceProtocol {
         }
     }
     
-    var bestGame: GameResult {
+    var bestGame: GameRecord {
         get {
-            let currentResult = GameResult(
+            let currentResult = GameRecord(
                 correct: storage.integer(forKey: Keys.bestGameCorrect.rawValue),
                 total: storage.integer(forKey: Keys.bestGameTotal.rawValue),
                 date: storage.object(forKey: Keys.bestGameDate.rawValue) as? Date ?? Date())
@@ -62,7 +62,7 @@ final class StatisticService: StatisticServiceProtocol {
         storage.set(totalQuestionsAsked, forKey: Keys.totalQuestionsAsked.rawValue)
         
         // проверить лучший результат на текущий момент
-        let currentGame = GameResult(correct: count, total: amount, date: Date())
+        let currentGame = GameRecord(correct: count, total: amount, date: Date())
         if currentGame.isBetterThan(bestGame) {
             bestGame = currentGame
         }

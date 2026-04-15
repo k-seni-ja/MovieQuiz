@@ -12,11 +12,16 @@ struct MostPopularMovies: Codable {
     let errorMessage: String
 }
 
-
 struct MostPopularMovie: Codable {
     let title: String
     let rating: String
     let imageURL: URL
+    
+    enum CodingKeys: String, CodingKey {
+        case title = "fullTitle"
+        case rating = "imDbRating"
+        case imageURL = "image"
+    }
     
     // экономия трафика (уменьшим размер картинки)
     var resizedImageURL: URL {
@@ -30,11 +35,7 @@ struct MostPopularMovie: Codable {
         }
         return newURL
     }
-    
-    enum CodingKeys: String, CodingKey {
-        case title = "fullTitle"
-        case rating = "imDbRating"
-        case imageURL = "image"
-    }
 }
+
+
 
