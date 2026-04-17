@@ -8,6 +8,7 @@
 import Foundation
 
 struct MockData {
+    
     // MARK: - JSON строка
     static let jsonString = """
 {  "errorMessage" : "",

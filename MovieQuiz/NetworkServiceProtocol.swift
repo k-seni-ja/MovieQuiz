@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol NetworkRouting {
+protocol NetworkServiceProtocol {
     func fetch(url: URL, handler: @escaping (Result<Data, Error>) -> Void)
 }

@@ -26,8 +26,8 @@ final class QuestionFactory: QuestionFactoryProtocol {
         // загрузка из mock-данных, когда переключатель useMockData = true
         if QuestionFactory.useMockData {
             DispatchQueue.main.async { [weak self] in
-                self?.movies = MockData.movies //сохраняем массив mock-фильмов в нашу новую переменную
-                self?.delegate?.didLoadDataFromServer() // сообщаем, что данные загрузились нашему MovieQuizViewController
+                self?.movies = MockData.movies
+                self?.delegate?.didLoadDataFromServer()
             }
             return
         }
@@ -38,18 +38,17 @@ final class QuestionFactory: QuestionFactoryProtocol {
                 switch result {
                 case .success(let mostPopularMovies):
                     print(" 🎞️ loadData вызван, фильмы загрузились: \(mostPopularMovies.items.count)")
-                    self.movies = mostPopularMovies.items // сохраняем фильм в нашу новую переменную
-                    self.delegate?.didLoadDataFromServer() // сообщаем, что данные загрузились нашему MovieQuizViewController
+                    self.movies = mostPopularMovies.items
+                    self.delegate?.didLoadDataFromServer()
                 case .failure(let error):
                     print(" ‼️ loadData вызван, ошибка загрузки фильмов: \(error)")
-                    self.delegate?.didFailToLoadData(with: error) // сообщаем об ошибке нашему MovieQuizViewController
+                    self.delegate?.didFailToLoadData(with: error)
                 }
             }
         }
     }
     
     func createQuestion(for movie: MostPopularMovie) -> (text: String, correctAnswer: Bool) {
-        // получим рейтинг фильма
         let rating = Float(movie.rating) ?? 0
         // генерируем сравнение
         let isGreaterThan = Bool.random() //true - больше чем, false - меньше чем
@@ -61,14 +60,10 @@ final class QuestionFactory: QuestionFactoryProtocol {
         var correctAnswer: Bool
         
         if isGreaterThan {
-            // Вопрос "больше чем X?" — порог ниже рейтинга
             threshold = max(0, rating - randomOffset)
-            // Правильный ответ: true, если рейтинг фильма больше порога
             correctAnswer = rating > threshold
         } else {
-            // Вопрос "меньше чем X?" — порог выше рейтинга
             threshold = min(10, rating + randomOffset)
-            // Правильный ответ: true, если рейтинг фильма меньше порога
             correctAnswer = rating < threshold
         }
         

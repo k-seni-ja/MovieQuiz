@@ -11,14 +11,13 @@ import Foundation
 struct MoviesLoader: MoviesLoadingProtocol {
     
     // MARK: - NetworkClient
-    private let networkClient: NetworkRouting
-    init(networkClient: NetworkRouting = NetworkClient()) {
+    private let networkClient: NetworkServiceProtocol
+    init(networkClient: NetworkServiceProtocol = NetworkClient()) {
         self.networkClient = networkClient
     }
     
     // MARK: - URL
     private var mostPopularMoviesUrl: URL {
-        // Если мы не смогли преобразовать строку в URL, то приложение упадёт с ошибкой
         guard let url = URL(string: "https://tv-api.com/en/API/Top250Movies/k_zcuw1ytf") else {
             preconditionFailure("Unable to construct mostPopularMoviesUrl")
         }
@@ -35,9 +34,10 @@ struct MoviesLoader: MoviesLoadingProtocol {
     func loadMovies(handler: @escaping (Result<MostPopularMovies, Error>) -> Void) {
         networkClient.fetch(url: mostPopularMoviesUrl) { result in
             switch result {
-            case .success(let data): // данные пришли
+            case .success(let data):
                 do {
-                    let mostPopularMovies = try JSONDecoder().decode(MostPopularMovies.self, from: data) // десериализация фильма
+                    let mostPopularMovies = try JSONDecoder().decode(MostPopularMovies.self, from: data)
+                    
                     // проверка ошибки от API
                     if !mostPopularMovies.errorMessage.isEmpty {
                         print("⁉️ Ошибка API: \(mostPopularMovies.errorMessage)")
@@ -58,7 +58,7 @@ struct MoviesLoader: MoviesLoadingProtocol {
                     print("⁉️ Ошибка парсинга данных: \(error)")
                     handler(.failure(MoviesLoaderError.decodingError(error)))
                 }
-            case .failure(let error): // данные не пришли
+            case .failure(let error):
                 print("⁉️ Ошибка сети: \(error)")
                 handler(.failure(error))
             }
