@@ -7,8 +7,8 @@
 
 import XCTest
 
+// MARK: - MovieQuizUITests
 final class MovieQuizUITests: XCTestCase {
-    // swiftlint:disable:next implicitly_unwrapped_optional
     var app: XCUIApplication!
     
     override func setUpWithError() throws {
@@ -24,9 +24,9 @@ final class MovieQuizUITests: XCTestCase {
         app = nil
     }
     
+    // MARK: - Tests
     // запросы выполняются с корректным API Key
     // в mock мало фильмов, поэтому сравнение постеров может выдавать "Test failed" ⛔️ из-за рандомного выбора одинаковых фильмов
-    
     func testYesButton() {
         sleep(3)
         
@@ -37,7 +37,7 @@ final class MovieQuizUITests: XCTestCase {
         sleep(5)
         
         let secondPoster = app.images["Poster"]
-        let secondPosterData = secondPoster.screenshot().pngRepresentation // преобразуем объект  класса XCUIElement в тип Data
+        let secondPosterData = secondPoster.screenshot().pngRepresentation 
         
         let indexLabel = app.staticTexts["Index"]
         XCTAssertFalse(firstPosterData == secondPosterData)

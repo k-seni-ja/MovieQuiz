@@ -8,6 +8,7 @@
 import Foundation
 
 final class MovieQuizPresenter: QuestionFactoryDelegate {
+    
     //MARK: - Dependencies
     private weak var viewController: MovieQuizViewControllerProtocol?
     private var questionFactory: QuestionFactoryProtocol?
@@ -55,6 +56,15 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
     
     //MARK: - Methods
+    // конвертируем модель данных QuizQuestion во View Model (готовим данные для отображения)
+    func convert (model: QuizQuestion) -> QuizStepViewModel {
+        let questionStep = QuizStepViewModel(
+            posterImage: model.imageData,
+            question: model.textQuestion,
+            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
+        return questionStep
+    }
+    
     func restartGame() {
         currentQuestionIndex = 0
         correctAnswers = 0
@@ -69,7 +79,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         didAnswer(isYes: true)
     }
     
-    private func isLastQuestion () -> Bool {
+    private func isLastQuestion() -> Bool {
         currentQuestionIndex == questionsAmount - 1
     }
     
@@ -83,19 +93,10 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         }
     }
     
-    private func didAnswer (isYes: Bool) {
+    private func didAnswer(isYes: Bool) {
         guard let currentQuestion else {return}
         let givenAnswer = isYes
         proceedWithAnswer(isCorrect: givenAnswer == currentQuestion.correctAnswer)
-    }
-    
-    // конвертируем модель данных QuizQuestion во View Model (готовим данные для отображения)
-    func convert (model: QuizQuestion) -> QuizStepViewModel {
-        let questionStep = QuizStepViewModel(
-            posterImage: model.imageData,
-            question: model.textQuestion,
-            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
-        return questionStep
     }
     
     // выбор между состояниями экрана "конец игры" / "вопрос"

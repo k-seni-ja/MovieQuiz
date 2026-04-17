@@ -48,7 +48,8 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrectAnswer ? UIColor.ypGreenIOS.cgColor : UIColor.ypRedIOS.cgColor
     }
-    // показ состояния экрана "конец игры"
+    
+    // Alert состояния экрана "конец игры"
     func showGameResult(quiz result: QuizResultsViewModel) {
         noButton.isEnabled = false
         yesButton.isEnabled = false
@@ -77,15 +78,14 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         alertPresenter.showResults(in: self, model: model)
     }
     
-    // показ индикатора загрузки данных
     func showLoadingIndicator() {
-        activityIndicator.startAnimating() // включаем анимацию
+        activityIndicator.startAnimating()
     }
     
-    //сообщение об успешной загрузке данных
     func hideLoadingIndicator() {
-        activityIndicator.stopAnimating() // выключаем анимацию
+        activityIndicator.stopAnimating()
     }
+    
     //MARK: - IBAction
     @IBAction private func noButtonClicked(_ sender: UIButton) {
         presenter?.noButtonClicked()

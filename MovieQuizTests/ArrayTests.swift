@@ -8,8 +8,11 @@
 import XCTest
 @testable import MovieQuiz // импортируем наше приложение для тестирования
 
+// MARK: - ArrayTests
 class ArrayTests: XCTestCase {
-    func testGetValueInRange() throws { // тест на успешное взятие элемента по индексу
+    
+    // MARK: - Tests
+    func testSafeSubscript_returnsValue_whenIndexInRange() { // тест на успешное взятие элемента по индексу
         // Given
         let array = [1, 1, 2, 3, 5]
         // When
@@ -19,7 +22,7 @@ class ArrayTests: XCTestCase {
         XCTAssertNotNil(value)
     }
     
-    func testGetValueOutOfRange() throws { // тест на взятие элемента по неправильному индексу
+    func testSafeSubscript_returnsNil_whenIndexOutOfRange() { // тест на взятие элемента по неправильному индексу
         // Given
         let array = [1, 1, 2, 3, 5]
         // When
